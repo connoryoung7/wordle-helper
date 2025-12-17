@@ -31,7 +31,7 @@ function WordleGrid({ rows = DEFAULT_ROWS, cols = DEFAULT_COLS }) {
         role="grid"
       >
         {
-            Array.from({ length: rows }).map((_, i) => {
+            Array.from({ length: Math.min(rows, currGuess + 1) }).map((_, i) => {
                 return (
                     <>
                         {Array.from({ length: cols }).map((_, j) => (
