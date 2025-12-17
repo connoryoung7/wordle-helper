@@ -1,6 +1,7 @@
 package internal_test
 
 import (
+	"fmt"
 	"testing"
 	"wordle-helper/internal"
 )
@@ -75,9 +76,11 @@ func TestSolver_GenerateValidStarterWords(t *testing.T) {
 
 	starterWords := solver.GenerateValidStarterWords()
 
-	if len(starterWords) == 0 {
-		t.Errorf("expected some starter words, got none")
+	for _, word := range starterWords {
+		fmt.Println(word)
 	}
+
+	// println("Generated Starter Words:", starterWords)
 
 	expectedStarters := []string{"ANGLE", "BANJO", "BINGO", "CRANE"}
 

@@ -31,20 +31,27 @@ func (s *Solver) GenerateValidStarterWords() []string {
 	var results []string
 
 	level := s.words
+	excludedLetters := make(map[byte]bool)
 
-	for char, nextLevel := range level {
-		excludedLetters := make(map[byte]bool)
-		excludedLetters[char] = true
-
-		s.traverse(nextLevel, string(char), WordContraints{
-			ExcludedLetters:   excludedLetters,
-			Positions:         make(map[int]*byte),
-			ExcludedPositions: make(map[int]map[byte]bool),
-			LetterCount:       make(map[byte]int),
-		}, &results)
-	}
+	s.searchForStarterWords(level, "", excludedLetters, &results)
 
 	return results
+}
+
+func (s *Solver) searchForStarterWords(level LetterLevel, prefix string, excludedLetters map[byte]bool, results *[]string) {
+	if len(prefix) == WordleWordLength {
+		*results = append(*results, prefix)
+		return
+	}
+
+	for char, nextLevel := range level {
+		if excludedLetters[char] {
+			continue
+		}
+		excludedLetters[char] = true
+		s.searchForStarterWords(nextLevel, prefix+string(char), excludedLetters, results)
+		delete(excludedLetters, char)
+	}
 }
 
 func (s *Solver) SuggestWords(constraints WordContraints) []string {
